@@ -10,29 +10,38 @@ class AlienInvasion:
         self.clock = pygame.time.Clock()
         self.settings = Settings()
        
-
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
         self.ship = SpaceShip(self)
 
     def run_game(self):
-        self._check_events()
+        while True:
+            self._check_events()
+            self.ship.update()
+            self._update_screen()
+            self.clock.tick(60)
 
     def _check_events(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RIGHT:
-                        self.ship.rect.x += 10
-                    elif  event.key == pygame.K_LEFT:
-                        self.ship.rect.x -= 10
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                self._check_keydown_events(event)
+            elif event.type == pygame.KEYUP:
+                self._check_keyup_events(event)
 
-            self._update_screen()
-            
-            """ Set the framerates to 60 """
-            self.clock.tick(60) 
+    def _check_keydown_events(self, event):
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = True
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = True
+
+    def _check_keyup_events(self, event):
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = False
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
+ 
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
