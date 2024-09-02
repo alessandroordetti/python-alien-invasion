@@ -6,7 +6,7 @@ class SpaceShip:
         self.settings = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()
 
-        self.image = pygame.image.load('images/ship.png')
+        self.image = pygame.image.load('images/ship.bmp')
         self.rect = self.image.get_rect()
 
         self.rect.midbottom = self.screen_rect.midbottom
@@ -17,9 +17,9 @@ class SpaceShip:
 
 
     def update(self):
-        if self.moving_right:
+        if self.moving_right and self.rect.right < self.screen_rect.right:
             self.rect.x += 5
-        elif self.moving_left:
+        elif self.moving_left and self.rect.left > 0:
             self.rect.x -= 5
 
     def blitme(self):
